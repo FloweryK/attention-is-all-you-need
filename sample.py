@@ -1,24 +1,27 @@
 import torch
-import sentencepiece as spm
+from vocab import VocabBasic, VocabSPM
 from transformer.transformer import Transformer
 
 
 if __name__ == '__main__':
-    # load vocab
-    vocab_file = "vocab/kowiki_8000.model"
-    vocab = spm.SentencePieceProcessor()
-    vocab.load(vocab_file)
-
     # test input
     lines = [
         "겨울은 추워요.",
         "아 빨리 끝내고 트위치 방송 보면서 잠이나 자고싶다."
     ]
 
+    # load vocab
+    # vocab = VocabSPM("src/vocab/kowiki_8000.model")
+    vocab = VocabBasic(lines)
+
+    # encode & decode
     x_enc = []
     x_dec = []
 
     for line in lines:
+        print(vocab.encode_as_pieces(line))
+        print(vocab.encode_as_ids(line))
+
         x_enc.append(torch.tensor(vocab.encode_as_ids(line)))
         x_dec.append(torch.tensor([vocab.piece_to_id("[BOS]")]))
     
