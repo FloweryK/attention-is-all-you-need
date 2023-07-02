@@ -9,9 +9,9 @@ class EncoderLayer(nn.Module):
         super().__init__()
 
         self.attention = MultiHeadAttention(config)
-        self.norm1 = nn.LayerNorm(config['d_emb'])
-        self.feedforward = nn.Linear(config['d_emb'], config['d_emb'])
-        self.norm2 = nn.LayerNorm(config['d_emb'])
+        self.norm1 = nn.LayerNorm(config.d_emb)
+        self.feedforward = nn.Linear(config.d_emb, config.d_emb)
+        self.norm2 = nn.LayerNorm(config.d_emb)
     
     def forward(self, x, mask):
         # x: (n_batch, n_seq, d_emb)
@@ -30,7 +30,7 @@ class Encoder(nn.Module):
 
         self.inputEmbedding = InputEmbedding(config)
         self.positionalEmbedding = PositionalEmbedding(config)
-        self.layers = nn.ModuleList([EncoderLayer(config) for _ in range(config['n_layer'])])
+        self.layers = nn.ModuleList([EncoderLayer(config) for _ in range(config.n_layer)])
     
     def forward(self, x):
         # x: (n_batch, n_seq)
@@ -53,13 +53,13 @@ class DecoderLayer(nn.Module):
         super().__init__()
 
         self.attention_self = MultiHeadAttention(config)
-        self.norm1 = nn.LayerNorm(config['d_emb'])
+        self.norm1 = nn.LayerNorm(config.d_emb)
 
         self.attention_encoder = MultiHeadAttention(config)
-        self.norm2 = nn.LayerNorm(config['d_emb'])
+        self.norm2 = nn.LayerNorm(config.d_emb)
 
-        self.feedforward = nn.Linear(config['d_emb'], config['d_emb'])
-        self.norm3 = nn.LayerNorm(config['d_emb'])
+        self.feedforward = nn.Linear(config.d_emb, config.d_emb)
+        self.norm3 = nn.LayerNorm(config.d_emb)
     
     def forward(self, x_dec, y_enc, mask_dec_self, mask_dec_enc):
         # x: (n_batch, n_seq, d_emb)
@@ -79,7 +79,7 @@ class Decoder(nn.Module):
 
         self.inputEmbedding = InputEmbedding(config)
         self.positionalEmbedding = PositionalEmbedding(config)
-        self.layers = nn.ModuleList([DecoderLayer(config) for _ in range(config['n_layer'])])
+        self.layers = nn.ModuleList([DecoderLayer(config) for _ in range(config.n_layer)])
     
     def forward(self, x_dec, x_enc, y_enc):
         # x_dec: (n_batch, n_seq_dec)

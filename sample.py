@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from vocab import VocabSPM
+from config import Config
 from model.transformer import Transformer
 
 
@@ -9,15 +10,7 @@ if __name__ == '__main__':
     vocab = VocabSPM("src/vocab/kowiki_8000.model")
 
     # config
-    config = dict(
-        n_vocab=len(vocab),
-        n_seq=200,
-        n_layer=6,
-        n_head=8,
-        d_emb=128,
-        d_hidden=100,
-        scale=100**(1/2),
-    )
+    config = Config(n_vocab=len(vocab), n_seq=200)
 
     # test inputs
     lines = [

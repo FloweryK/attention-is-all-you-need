@@ -7,14 +7,14 @@ class MultiHeadAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
 
-        self.n_head = config['n_head']
-        self.d_hidden = config['d_hidden']
-        self.scale = config['scale']
+        self.n_head = config.n_head
+        self.d_hidden = config.d_hidden
+        self.scale = config.scale
 
-        self.W_Q = nn.Linear(config['d_emb'], config['n_head'] * config['d_hidden'])
-        self.W_K = nn.Linear(config['d_emb'], config['n_head'] * config['d_hidden'])
-        self.W_V = nn.Linear(config['d_emb'], config['n_head'] * config['d_hidden'])
-        self.W_O = nn.Linear(config['n_head'] * config['d_hidden'], config['d_emb'])
+        self.W_Q = nn.Linear(config.d_emb, config.n_head * config.d_hidden)
+        self.W_K = nn.Linear(config.d_emb, config.n_head * config.d_hidden)
+        self.W_V = nn.Linear(config.d_emb, config.n_head * config.d_hidden)
+        self.W_O = nn.Linear(config.n_head * config.d_hidden, config.d_emb)
     
     def forward(self, q, k, v, mask=None):
         # q, k, v: (n_batch, n_seq, d_emb)
