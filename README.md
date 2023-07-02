@@ -1,6 +1,6 @@
 # Attention-Is-All-You-Need
 
-PyTorch Implementation of: Vaswani, Ashish, et al. "Attention is all you need." *Advances in neural information processing systems* 30 (2017).
+PyTorch Implementation of: Vaswani, Ashish, et al. "Attention is all you need." _Advances in neural information processing systems_ 30 (2017).
 
 https://arxiv.org/abs/1706.03762
 
@@ -18,21 +18,15 @@ https://arxiv.org/abs/1706.03762
 
 <br/>
 
-
-
 #### 2. set input lines
 
-- set input lines in `lines` from `sample.py` 
+- set input lines in `lines` from `sample.py`
 
 <br/>
-
-
 
 #### 3. run `sample.py`
 
 - you will get returns from transformer
-
-
 
 <br/>
 
@@ -41,3 +35,4 @@ https://arxiv.org/abs/1706.03762
 ## References
 
 - https://paul-hyun.github.io/transformer-01/
+- https://wikidocs.net/31379
