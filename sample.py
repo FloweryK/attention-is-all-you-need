@@ -7,7 +7,7 @@ from model.transformer import Transformer
 
 if __name__ == '__main__':
     # vocab
-    vocab = VocabSPM("src/vocab/kowiki_8000.model")
+    vocab = VocabSPM("src/vocab/spm/kowiki_8000.model")
 
     # config
     config = Config(
