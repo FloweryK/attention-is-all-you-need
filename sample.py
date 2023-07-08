@@ -1,3 +1,4 @@
+import argparse
 import torch
 import torch.nn as nn
 from vocab import VocabSPM
@@ -6,8 +7,14 @@ from model.transformer import Transformer
 
 
 if __name__ == '__main__':
+    # parse args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', '--model', dest='model', required=True)
+    parser.add_argument('-i'', --inputs', dest='inputs', nargs='+', required=True)
+    args = parser.parse_args()
+
     # vocab
-    vocab = VocabSPM("src/vocab/spm/kowiki_8000.model")
+    vocab = VocabSPM(args.model)
 
     # config
     config = Config(
@@ -21,10 +28,7 @@ if __name__ == '__main__':
     )
 
     # test inputs
-    lines = [
-        "겨울은 추워요.",
-        "아 빨리 끝내고 트위치 방송 보면서 잠이나 자고싶다."
-    ]
+    lines = args.inputs
 
     x_enc = []
     x_dec = []
