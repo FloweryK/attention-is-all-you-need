@@ -36,7 +36,7 @@ class Encoder(nn.Module):
         # x: (n_batch, n_seq)
 
         # mask: (n_batch, n_seq, n_seq)
-        mask = x.eq(0).unsqueeze(1).expand(x.size(0), x.size(1), x.size(1))
+        mask = x.eq(0).unsqueeze(1).repeat(1, x.size(1), 1)
 
         # x: (n_batch, n_seq, d_emb)
         x = self.inputEmbedding(x) + self.positionalEmbedding(x)
@@ -87,12 +87,12 @@ class Decoder(nn.Module):
         # y_enc: (n_batch, n_seq_enc, n_emb)
         
         # mask_dec_self: (n_batch, n_seq_dec, n_seq_dec)
-        mask_dec_pad = x_dec.eq(0).unsqueeze(1).expand(x_dec.size(0), x_dec.size(1), x_dec.size(1))
+        mask_dec_pad = x_dec.eq(0).unsqueeze(1).repeat(1, x_dec.size(1), 1)
         mask_dec_ahead = torch.ones_like(mask_dec_pad).triu(diagonal=1)
         mask_dec_self = torch.gt(mask_dec_pad, mask_dec_ahead)
 
         # mask_dec_enc: (n_batch, n_seq_dec, n_seq_enc)
-        mask_dec_enc = x_dec.eq(0).unsqueeze(1).expand(x_dec.size(0), x_dec.size(1), x_enc.size(1))
+        mask_dec_enc = x_enc.eq(0).unsqueeze(1).repeat(1, x_dec.size(1), 1)
 
         # x_dec: (n_batch, n_seq_dec, d_emb)
         x_dec = self.inputEmbedding(x_dec) + self.positionalEmbedding(x_dec)
