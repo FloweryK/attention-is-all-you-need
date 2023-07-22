@@ -8,25 +8,58 @@ https://arxiv.org/abs/1706.03762
 
 <br/>
 
-## How to use
+## A minimal usage of transformer
 
-#### 1. select Vocab model
+- you can customize the transformer's configuration in `config.py`
 
-- you can choose `VocabBasic` or `VocabSPM`
-- `VocabBasic`: character-level vocab model without using any sentence processor
-- `VocabSPM`: token-level vocab model using [sentencepiece](https://github.com/google/sentencepiece) (trained with [kowiki](https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4_%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C))
+  ```python
+  # model
+  n_vocab = 8000+7 # only for sentencepiece
+  n_seq = 1000
+  n_layer = 6
+  n_head = 8
+  d_emb = 512
+  d_hidden = 2048
+  dropout = 0.1
+  scale = (512//8)**(1/2)
+  ```
+
+- then you can use the transformer as follows:
+
+  ```python
+  import config
+  from transformer import Transformer
+  
+  model = Transformer(config)
+  ```
+
+- the required input & ouput format is as follows:
+
+  ```python
+  import torch
+  
+  # encoder input: should be a list of list (of encoded ids of encoder input)
+  x_enc = torch.tensor([[2, 10, 6714, 3], [2, 7, 3, 0]])		# torch.Size([2, 4])
+  
+  # decoder input: should be a list of list (of encoded ids of decoder input)
+  x_dec = torch.tensor([[2, 68, 3, 0, 0, 0], [2, 182, 4922, 1032, 4, 3]])		# torch.Size([2, 6])
+  
+  # decoder output (result)
+  y_dec = model(x_enc, x_dec)		# torch.Size([2, 6, 512])
+  ```
 
 <br/>
 
-#### 2. set input lines
-
-- set input lines in `lines` from `sample.py`
-
 <br/>
 
-#### 3. run `sample.py`
+## How to use sample.py
 
-- you will get returns from transformer
+| flag             | description              | example                                             | default                           |
+| ---------------- | ------------------------ | --------------------------------------------------- | --------------------------------- |
+| -v, --vocab      | vocab model name         | `sentencepiece`                                     | `basic`                           |
+| -p, --vocab_path | vocab model path         | `src/vocab/spm/kowiki_8000.model`                   | `src/vocab/spm/kowiki_8000.model` |
+| -e, --enc        | encoder inputs (as list) | `"the truth is" "hello from the other side"`        | required                          |
+| -d, --dec        | decoder inputs (as list) | `"I am Iron man" "at least i can say that i tried"` | required                          |
 
 <br/>
 
