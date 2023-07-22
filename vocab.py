@@ -9,6 +9,7 @@ SEP = 4
 CLS = 5
 MASK = 6
 
+
 class VocabBasic:
     def __init__(self, lines):
         self.char2id = {
@@ -28,7 +29,7 @@ class VocabBasic:
         return len(self.char2id)
     
     def make_ids(self, lines):
-        id_cur = 0
+        id_cur = 7
 
         # make char2id
         for line in lines:
