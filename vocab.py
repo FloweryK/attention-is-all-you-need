@@ -1,16 +1,24 @@
 import sentencepiece as spm
 
+# vocab
+PAD = 0
+UNK = 1
+BOS = 2
+EOS = 3
+SEP = 4
+CLS = 5
+MASK = 6
 
 class VocabBasic:
     def __init__(self, lines):
         self.char2id = {
-            "[PAD]": 0,
-            "[UNK]": 1,
-            "[BOS]": 2,
-            "[EOS]": 3,
-            "[SEP]": 4,
-            "[CLS]": 5,
-            "[MASK]": 6,
+            "[PAD]": PAD,
+            "[UNK]": UNK,
+            "[BOS]": BOS,
+            "[EOS]": EOS,
+            "[SEP]": SEP,
+            "[CLS]": CLS,
+            "[MASK]": MASK,
         }
         self.id2char = {}
 

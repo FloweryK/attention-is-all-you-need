@@ -1,44 +1,32 @@
 import argparse
 import torch
 import torch.nn as nn
-from vocab import VocabSPM
-from config import Config
-from model.transformer import Transformer
+import config
+from vocab import VocabSPM, BOS, PAD
+from transformer import Transformer
 
 
 if __name__ == '__main__':
     # parse args
     parser = argparse.ArgumentParser()
-    parser.add_argument('-m', '--model', dest='model', required=True)
-    parser.add_argument('-i'', --inputs', dest='inputs', nargs='+', required=True)
+    parser.add_argument('-v', '--vocab', dest='vocab', required=True)
+    parser.add_argument('-e',  '--enc', dest='x_encs', nargs='+', required=True)
+    parser.add_argument('-d',  '--dec', dest='x_decs', nargs='+', required=True)
     args = parser.parse_args()
 
     # vocab
-    vocab = VocabSPM(args.model)
-
-    # config
-    config = Config(
-        n_vocab=len(vocab), 
-        n_seq=200,
-        n_layer=6,
-        n_head=8,
-        d_emb=128,
-        d_hidden=100,
-        scale=100**(1/2),
-    )
+    vocab = VocabSPM(args.vocab)
 
     # test inputs
-    lines = args.inputs
-
     x_enc = []
     x_dec = []
 
-    for line in lines:
-        x_enc.append(torch.tensor(vocab.EncodeAsIds(line)))
-        x_dec.append(torch.tensor([vocab.PieceToId('[BOS]')]))
+    for enc, dec in zip(args.x_encs, args.x_decs):
+        x_enc.append(torch.tensor(vocab.EncodeAsIds(enc)))
+        x_dec.append(torch.tensor(vocab.EncodeAsIds(dec)))
 
-    x_enc = nn.utils.rnn.pad_sequence(x_enc, batch_first=True, padding_value=0)
-    x_dec = nn.utils.rnn.pad_sequence(x_dec, batch_first=True, padding_value=0)
+    x_enc = nn.utils.rnn.pad_sequence(x_enc, batch_first=True, padding_value=PAD)
+    x_dec = nn.utils.rnn.pad_sequence(x_dec, batch_first=True, padding_value=PAD)
 
     # transformer
     transformer = Transformer(config)
@@ -46,4 +34,10 @@ if __name__ == '__main__':
     # test outputs
     y_dec = transformer(x_enc, x_dec)
 
-    print(y_dec.shape)
+    assert len(args.x_encs) == len(args.x_decs)
+    
+    for i in range(len(args.x_encs)):
+        print(f"\n#{i}")
+        print('\t x_enc:', x_enc[i])
+        print('\t x_dec:', x_dec[i])
+        print('\t y_dec:', y_dec[i])
