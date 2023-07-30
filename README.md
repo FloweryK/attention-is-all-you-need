@@ -1,4 +1,4 @@
-# Attention-Is-All-You-Need
+# Transformer
 
 PyTorch Implementation of: Vaswani, Ashish, et al. "Attention is all you need." _Advances in neural information processing systems_ 30 (2017).
 
